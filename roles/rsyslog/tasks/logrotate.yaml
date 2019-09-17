@@ -20,10 +20,10 @@
       maxage 90
       rotate 90
       missingok
-      ifempty
+      nocopytruncate
       olddir /logBakServer/systemlog_allserver/{{ inventory_hostname }}
       createolddir 0755 root root
-      notifempty
+      ifempty
       create 0600 root root
       sharedscripts
       postrotate

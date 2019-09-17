@@ -1,0 +1,9 @@
+- name:  Creates an entry like 59 23 * * * nice run-parts /etc/cron.daily
+  cron:
+    name: "Create crond.daily"
+    minute: "59"
+    hour: "23"
+    user: root
+    job: "cron.daily          nice run-parts /etc/cron.daily"
+  notify:
+    - restart crond
