@@ -1,0 +1,16 @@
+- name: ADD systemlog on /root/rsyslog.conf
+  blockinfile:
+    path: /root/rsyslog.conf
+    marker_begin: "start Logging"
+    marker_end: "end Logging"
+    insertafter: "cron.none"
+    state: present
+    block: |
+     *.notice                                                 /var/log/notice
+     *.warning                                                /var/log/warning
+     *.err                                                    /var/log/error
+     *.crit                                                   /var/log/crit
+     *.alert                                                  /var/log/alert
+     *.emerg                                                  /var/log/emerg_log
+  notify:
+    - restart rsyslog

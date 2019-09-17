@@ -1,0 +1,3 @@
+- include: base.yaml
+- include: logrotate.yaml
+- include: rsyslog.yaml

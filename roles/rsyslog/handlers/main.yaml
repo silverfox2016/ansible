@@ -1,0 +1,10 @@
+---
+
+- name: restart crond
+  service:
+    name: crond
+    state: restarted
+- name: restart rsyslog
+  service:
+    name: rsyslog
+    state: restarted
