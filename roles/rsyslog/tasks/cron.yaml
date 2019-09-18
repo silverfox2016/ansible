@@ -1,9 +1,29 @@
 - name:  Creates an entry like 59 23 * * * nice run-parts /etc/cron.daily
   cron:
     name: "Create crond.daily"
-    minute: "59"
+    minute: "58"
     hour: "23"
     user: root
-    job: "cron.daily          nice run-parts /etc/cron.daily"
+    job: "/usr/sbin/logrotate -vf /etc/logrotate.d/logfile"
+
+- name: Create env
+  cron:
+    vars:
+      paths: {{ shell  }}
+      with_shells:
+        - SHELL
+        - PATH
+        - MAILTO
+      jobs: {{ job_path }}
+      with_job_paths:
+        - /bin/shell
+        - /sbin:/bin:/usr/sbin:/usr/bin
+        - root
+      
+    name: "{{ path }}"
+    env: yes
+    job: "{{ jobs }}"
+
   notify:
     - restart crond
+  
