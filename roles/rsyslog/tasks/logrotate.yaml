@@ -17,7 +17,7 @@
       daily
       dateext
       dateformat _%Y_%m_%d
-      maxage 90
+      maxage 180
       rotate 90
       missingok
       nocopytruncate

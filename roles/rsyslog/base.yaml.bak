@@ -1,9 +1,0 @@
----
-- hosts: all
-  tasks:
-    - name: Install logrotate rsyslog crontab
-      yum: name={{ item }} state=present
-      with_items:
-        - logroate
-        - rsyslog
-        - crontabs

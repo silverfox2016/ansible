@@ -1,29 +1,26 @@
-- name:  Creates an entry like 59 23 * * * nice run-parts /etc/cron.daily
+- name: Create crontabs
   cron:
-    name: "Create crond.daily"
+    name: create logrotate daily
     minute: "58"
     hour: "23"
     user: root
+    state: present
     job: "/usr/sbin/logrotate -vf /etc/logrotate.d/logfile"
-
-- name: Create env
+- name: crontab shell
   cron:
-    vars:
-      paths: {{ shell  }}
-      with_shells:
-        - SHELL
-        - PATH
-        - MAILTO
-      jobs: {{ job_path }}
-      with_job_paths:
-        - /bin/shell
-        - /sbin:/bin:/usr/sbin:/usr/bin
-        - root
-      
-    name: "{{ path }}"
+    name: SHELL
     env: yes
-    job: "{{ jobs }}"
-
+    job: /bin/bash
+- name: crontab path
+  cron:
+    name: PATH
+    env: yes
+    job: /sbin:/bin:/usr/sbin:/usr/bin
+- name: crontab mail
+  cron:
+    name: MAILTO
+    env: yes
+    job: root
   notify:
     - restart crond
   
