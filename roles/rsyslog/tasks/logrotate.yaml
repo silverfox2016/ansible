@@ -15,19 +15,29 @@
       /var/log/emerg_log
       {
       daily
-      dateext
-      dateformat _%Y_%m_%d
       maxage 180
       rotate 90
       missingok
       nocopytruncate
-      olddir /logBakServer/systemlog_allserver/{{ inventory_hostname }}
-      createolddir 0755 root root
       ifempty
       create 0600 root root
       sharedscripts
-      postrotate
-          /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+      prerotate
+        TIME=`date '+%Y_%m_%d'`
+        DST_PATH=/logBakServer/systemlog_allserver/{{ inventory_hostname  }}
+        
+        FILES=(notice warning error crit emerg_log)
+        
+        if [ ! = ${DST_PATH} ];then
+            mkdir -p ${DST_PATH}
+        else
+            continue
+        fi
+        for FILE in ${FILES[@]}
+        do
+        cp /var/log/${FILE} ${DST_PATH}/${TIME}_${FILE}
+        done
+        /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
       endscript
       }
   notify:
