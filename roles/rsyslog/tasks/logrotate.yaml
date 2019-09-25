@@ -28,7 +28,7 @@
         
         FILES=(notice warning error crit emerg_log)
         
-        if [ ! = ${DST_PATH} ];then
+        if [ ! -d ${DST_PATH} ];then
             mkdir -p ${DST_PATH}
         else
             continue

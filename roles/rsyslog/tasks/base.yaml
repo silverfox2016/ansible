@@ -1,6 +1,14 @@
 - name: Install logrotate rsyslog crontab
-  yum: name={{ item }} state=present
+  package: name={{ item }} state=installed use=yum
   with_items:
     - logrotate
     - rsyslog
     - crontabs
+  when: ansible_distribution_major_version >= "6"
+- name: Install logrotate rsyslog crontab
+  package: name={{ item }} state=installed use=yum
+  with_items:
+    - logrotate
+    - sysklogd
+    - crontabs
+  when: ansible_distribution_major_version < "6"

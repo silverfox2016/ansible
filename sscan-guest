@@ -1,0 +1,12 @@
+# Nmap 6.40 scan initiated Fri Sep 20 13:30:55 2019 as: nmap -osscan-guest centos 192.168.1.214
+Failed to resolve "centos".
+Nmap scan report for 192.168.1.214
+Host is up (0.000094s latency).
+Not shown: 997 closed ports
+PORT     STATE SERVICE
+22/tcp   open  ssh
+111/tcp  open  rpcbind
+3690/tcp open  svn
+MAC Address: 2C:76:8A:AA:A6:7C (Hewlett-Packard Company)
+
+# Nmap done at Fri Sep 20 13:30:55 2019 -- 1 IP address (1 host up) scanned in 0.17 seconds
