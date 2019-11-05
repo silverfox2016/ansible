@@ -1,6 +1,5 @@
 ---
-#- hosts: "{{ host }}"
-- hosts: all
+- hosts: "{{ host }}"
   gather_facts: true
   
   roles:

@@ -1,11 +1,12 @@
 ---
 
-- hosts: localhost
+- hosts: "{{ host }}"
+  gather_facts: false
   tasks:
   - name: mount cifs 
     mount:
       path: /logBakServer
-      src: //192.168.5.107/logBakServer 
+      src: //192.168.10.19/logBakServer
       fstype: cifs
       opts: "username=logServer,password=PmPh#3025#logS"
       state: mounted

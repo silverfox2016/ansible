@@ -1,0 +1,66 @@
+---
+
+- hosts: "{{ host }}"
+  gather_facts: No
+  tasks:
+    - name: find file
+      find:
+        paths: /etc/yum.repos.d
+        patterns: '*.repo'
+      register: files_to_delete
+
+    - name: rm all repo
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete.files }}"
+
+    - name: copy repo file
+      copy:
+        src: /root/CentOS-Base.repo
+        dest: /etc/yum.repos.d/CentOS-Base.repo
+
+    - name: Basic install
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+          - chrony
+          - vim
+          - wget
+          - net-tools
+          - bind-utils
+          - epel-release
+
+    ########Selinux Firewalld Disable########
+    - name: Selinux dsiable
+      lineinfile:
+        dest: /etc/selinux/config
+        regexp: '^SELINUX='
+        line: 'SELINUX=disabled'
+
+    - name: Selinux stop
+      selinux: state=disabled
+
+    - name: Firewalld disable
+      service:
+        name: "{{ item }}"
+        state: stopped
+        enabled: no
+      with_items:
+      - firewalld
+      - postfix
+    ########Ssh Init#######
+    - name: close ssh UserDNS
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '#UseDNS yes'
+        line: 'UseDNS no'
+    - name: Restart sshd
+      service: name=sshd state=restarted enabled=yes
+
+    - name: yum update
+      yum:
+        name: "*"
+        state: latest
+

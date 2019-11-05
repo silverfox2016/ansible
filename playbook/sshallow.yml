@@ -1,0 +1,20 @@
+---
+
+- hosts: "{{ host }}"
+  gather_facts: false
+  tasks:
+    - name: Add AllowUser to sshd_config
+      blockinfile:
+        path: /etc/ssh/sshd_config
+        block: |
+          AllowUsers root@192.168.42.5
+          AllowUsers root@192.168.1.5
+          AllowUsers root@119.254.225.109
+          AllowUsers root@192.168.1.66
+          AllowUsers root@192.168.1.67
+          AllowUsers root@192.168.12.66
+    - name: Restart sshd
+      service: 
+        name: sshd
+        state: restarted
+        enabled: yes
