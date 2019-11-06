@@ -1,16 +1,20 @@
 ---
-
 - hosts: "{{ host }}"
-  gather_facts: false
   tasks:
-    - name: copy repo file
-      copy:
-        src: /etc/yum.repos.d/zabbix.repo
-        dest: /etc/yum.repos.d/zabbix.repo
-    - name:
-      yum:
-       name: zabbix-agent
-       state: present
-    - name: 
-      
+    - name: change zabbix-agent_config in Server
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'Server='
+        line: 'Server=192.168.3.121,192.168.1.68'
 
+    - name: change zabbix-agent_config in ServerActive
+      lineinfile:
+        dest: /root/zabbix_agentd.conf
+        regexp: 'ServerActive'
+        line: 'ServerActive=192.168.3.121,192.168.1.68'
+
+    - name: change zabbix-agent_config in Hostname
+      lineinfile:
+        dest: /root/zabbix_agentd.conf
+        regexp: '^Hostname'
+        line: 'Hostname={{ host }}'
