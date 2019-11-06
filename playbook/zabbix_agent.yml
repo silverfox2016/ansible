@@ -3,3 +3,14 @@
 - hosts: "{{ host }}"
   gather_facts: false
   tasks:
+    - name: copy repo file
+      copy:
+        src: /etc/yum.repos.d/zabbix.repo
+        dest: /etc/yum.repos.d/zabbix.repo
+    - name:
+      yum:
+       name: zabbix-agent
+       state: present
+    - name: 
+      
+
