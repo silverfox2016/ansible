@@ -1,0 +1,44 @@
+- name: ADD logrotate in /etc/logrotate.d/logfile
+  blockinfile:
+    path: /etc/logrotate.d/logfile
+    marker_begin: "start logrotate"
+    marker_end: "end logrotate"
+    insertafter: ""
+    create: true
+    state: present
+    block: |
+      /var/log/notice
+      /var/log/warning
+      /var/log/error
+      /var/log/crit
+      /var/log/alert
+      /var/log/emerg_log
+      {
+      daily
+      maxage 180
+      rotate 90
+      missingok
+      nocopytruncate
+      ifempty
+      create 0600 root root
+      sharedscripts
+      prerotate
+        TIME=`date '+%Y_%m_%d'`
+        DST_PATH=/logBakServer/systemlog_allserver/{{ inventory_hostname  }}
+        
+        FILES=(notice warning error crit emerg_log)
+        
+        if [ ! -d ${DST_PATH} ];then
+            mkdir -p ${DST_PATH}
+        else
+            continue
+        fi
+        for FILE in ${FILES[@]}
+        do
+        cp /var/log/${FILE} ${DST_PATH}/${TIME}_${FILE}
+        done
+        /bin/kill -HUP `cat /var/run/syslogd.pid 2> /dev/null` 2> /dev/null || true
+      endscript
+      }
+  notify:
+    - restart crond

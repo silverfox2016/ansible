@@ -1,0 +1,37 @@
+- name: ADD systemlog on /etc/rsyslog.conf
+  blockinfile:
+    path: /etc/rsyslog.conf
+    marker_begin: "start Logging"
+    marker_end: "end Logging"
+    insertafter: "cron.none"
+    state: present
+    block: |
+     *.notice                                                /var/log/notice
+     *.warning                                               /var/log/warning
+     *.err                                                   /var/log/error
+     *.crit                                                  /var/log/crit
+     *.alert                                                 /var/log/alert
+     *.emerg                                                 /var/log/emerg_log
+  notify:
+    - restart rsyslog
+  when: ansible_distribution_major_version >= "6"
+
+- name: ADD systemlog on /etc/syslog.conf
+  blockinfile:
+    path: /etc/syslog.conf
+    marker_begin: "start Logging"
+    marker_end: "end Logging"
+    insertafter: "cron.none"
+    state: present
+    block: |
+     *.notice                                                /var/log/notice
+     *.warning                                               /var/log/warning
+     *.err                                                   /var/log/error
+     *.crit                                                  /var/log/crit
+     *.alert                                                 /var/log/alert
+     *.emerg                                                 /var/log/emerg_log
+  notify:
+    - restart rsyslog
+  when: ansible_distribution_major_version < "6"
+
+
