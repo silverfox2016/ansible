@@ -1,16 +1,21 @@
 ---
-
 - hosts: "{{ host }}"
   tasks:
-    - name  copy zabbix.repo dest host
+    - name: copy zabbix.repo dest host
       copy:
-        src: /etc/yum.repos.d/zabbix.rep
-        dest: /etc/yum.repos.d/zabbix.rep
+        src: /etc/yum.repos.d/zabbix.repo
+        dest: /etc/yum.repos.d/zabbix.repo
  
-    - name  copy zabbix.repo.key dest host
+    - name: copy zabbix.repo.key dest host
       copy:
         src: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591
         dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591
+    
+    - name: install zabbix-agent
+      yum:
+        name: zabbix-agent
+        state: installed
+        enablerepo: zabbix
  
     - name: change zabbix-agent_config in Server
       lineinfile:
@@ -20,19 +25,19 @@
  
     - name: change zabbix-agent_config in ServerActive
       lineinfile:
-        dest: /root/zabbix_agentd.conf
+        dest: /etc/zabbix/zabbix_agentd.conf
         regexp: 'ServerActive'
         line: 'ServerActive=192.168.3.121,192.168.1.68'
  
     - name: change zabbix-agent_config in Hostname
       lineinfile:
-        dest: /root/zabbix_agentd.conf
+        dest: /etc/zabbix/zabbix_agentd.conf
         regexp: '^Hostname'
         line: 'Hostname={{ host }}'
  
     - name: change zabbix-agent_config in HostMetadata
       lineinfile:
-        dest: /root/zabbix_agentd.conf
+        dest: /etc/zabbix/zabbix_agentd.conf
         regexp: '# HostMetadata='
         line: 'HostMetadata=Linux'
     - name: start or restart zabbix-agent
