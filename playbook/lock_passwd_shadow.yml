@@ -1,0 +1,9 @@
+---
+
+- hosts: "{{ host }}"
+  gather_facts: false
+  tasks:
+  - name: chattr +i /etc/passwd
+    shell: chattr +i /etc/passwd
+  - name: chattr +i /etc/shadow 
+    shell: chattr +i /etc/shadow

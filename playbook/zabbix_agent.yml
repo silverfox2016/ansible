@@ -21,19 +21,19 @@
       lineinfile:
         dest: /etc/zabbix/zabbix_agentd.conf
         regexp: 'Server='
-        line: 'Server=192.168.3.121,192.168.1.68'
+        line: 'Server=192.168.3.121,192.168.12.28'
  
     - name: change zabbix-agent_config in ServerActive
       lineinfile:
         dest: /etc/zabbix/zabbix_agentd.conf
         regexp: 'ServerActive'
-        line: 'ServerActive=192.168.3.121,192.168.1.68'
+        line: 'ServerActive=192.168.3.121,192.168.12.28'
  
     - name: change zabbix-agent_config in Hostname
       lineinfile:
         dest: /etc/zabbix/zabbix_agentd.conf
         regexp: '^Hostname'
-        line: 'Hostname={{ host }}'
+        line: 'Hostname={{ ansible_host }}'
  
     - name: change zabbix-agent_config in HostMetadata
       lineinfile:

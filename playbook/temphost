@@ -5,3 +5,5 @@
 
 192.168.2.6 ansible_host=192.168.2.6 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass=")(@!192.168.2.6"
 192.168.2.11 ansible_host=192.168.2.11 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass=")(@!192.168.2.11"
+192.168.5.110 ansible_host=192.168.5.110 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.5.176 ansible_host=192.168.5.176 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass="pmph2019!"

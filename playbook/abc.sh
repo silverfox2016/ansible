@@ -3,5 +3,5 @@
 for IP in `cat iplist`
 do
 	#ansible ${IP} -m shell -a 'df -TH | grep logBakServer'
-	ansible-playbook mount_cifs.yaml -e host=${IP}
+	ansible-playbook zabbix_agent.yml -e host=${IP}
 done
