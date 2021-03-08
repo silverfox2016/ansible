@@ -1,1 +1,8 @@
 hosts
+playbook/yangshuo
+playbook/winhost
+playbook/texthost
+playbook/temphost
+playbook/M_list
+playbook/BL460Gen9.list
+playbook/a.sh
