@@ -3,6 +3,7 @@
 - hosts: "{{ host }}"
   gather_facts: No
   tasks:
+  ##########repos##########################
     - name: find file
       find:
         paths: /etc/yum.repos.d
@@ -25,24 +26,53 @@
         name: "{{ item }}"
         state: latest
       with_items:
+          - sendmail
+          - mailx
+          - tmux
+          - strace
+          - cifs-utils
+          - dstat
+          - rsync
           - chrony
           - vim
           - wget
           - net-tools
           - bind-utils
+          - ntpdate
           - epel-release
-
+    #######add ntpdate server#############
+    - name:  crontab ntpdate 192.168.12.29
+      cron:
+        name:  add contab ntpdate 192.168.12.29
+        minute: "*"
+        hour: "*"
+        day: "*"
+        month: "*"
+        weekday: "*"
+        user: root 
+        job: "/usr/sbin/ntpdate 192.168.12.29"
+    ###########add limit.conf################
+    - name: Add soft hard limit conf 
+      blockinfile:
+        path: /etc/security/limits.conf
+        marker_begin: "start limit"
+        marker_end: "end limit"
+        insertafter: "End of file"
+        state: present
+        block: |
+          * soft nofile 32678 
+          * hard nofile 65536
     ########Selinux Firewalld Disable########
     - name: Selinux dsiable
-      lineinfile:
+      replace:
         dest: /etc/selinux/config
-        regexp: '^SELINUX='
-        line: 'SELINUX=disabled'
+        regexp: '^SELINUX=enforcing'
+        replace: 'SELINUX=disabled'
 
     - name: Selinux stop
       selinux: state=disabled
 
-    - name: Firewalld disable
+    - name: Firewalld postifx disable
       service:
         name: "{{ item }}"
         state: stopped
@@ -50,17 +80,75 @@
       with_items:
       - firewalld
       - postfix
-    ########Ssh Init#######
+      - sendmail
+
+    ########SSh init#######
     - name: close ssh UserDNS
-      lineinfile:
+      replace:
         path: /etc/ssh/sshd_config
         regexp: '#UseDNS yes'
-        line: 'UseDNS no'
+        replace: 'UseDNS no'
+    - name: push root user sshkey to dst host
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/root/id_rsa.pub') }}"
+    - name: change root password
+      shell: echo ')(@!{{ ansible_host }}' |passwd --stdin root
+
     - name: Restart sshd
       service: name=sshd state=restarted enabled=yes
 
+
+   # ###########zabbix-agent##########################
+    - name: copy zabbix.repo dest host
+      copy:
+        src: /etc/yum.repos.d/zabbix.repo
+        dest: /etc/yum.repos.d/zabbix.repo
+    - name: copy zabbix.repo.key dest host
+      copy:
+        src: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591
+        dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591
+    - name: install zabbix-agent
+      yum:
+        name: zabbix-agent
+        state: installed
+        enablerepo: zabbix
+    - name: change zabbix-agent_config in Server
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'Server='
+        line: 'Server=192.168.12.29'
+    - name: change zabbix-agent_config in ServerActive
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'ServerActive'
+        line: 'ServerActive=192.168.12.29'
+    - name: change zabbix-agent_config in Hostname
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Hostname'
+        line: 'Hostname={{ ansible_host }}'
+    - name: change zabbix-agent_config in HostMetadata
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: '# HostMetadata='
+        line: 'HostMetadata=Linux'
+    - name: start or restart zabbix-agent
+      service:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
+
+   # ########yum update ############################
     - name: yum update
       yum:
         name: "*"
         state: latest
-
+   #### add machine to ansible hosts ##################
+    - name: 
+      lineinfile: 
+        dest: /etc/ansible/hosts
+        state: present
+        line: "{{ ansible_host }} ansible_host={{ ansible_host}}"
+      delegate_to: localhost

@@ -1,0 +1,62 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+    - name: synchronize scripts to /home/oracle/task/
+      synchronize:
+        src: /root/ansible/playbook/scripts/oracle/
+        dest: /home/oracle/task/
+    - name: add "APP_HOME" environment variable from crontab
+      cron:
+        name: MAILTO
+        env: yes
+        user: oracle
+        state: present
+        job: oracle
+    - name: add oracle crontab every day 0
+      cron:
+        name:  add oracle zabbix crontab every day 0
+        minute: "0"
+        hour: "0"
+        user: oracle
+        job: "/home/oracle/task/zabbixXJ.sh"
+    - name: copy userparameter_oracle.conf
+      copy:
+        src: /etc/zabbix/zabbix_agentd.d/userparameter_oracle.conf
+        dest: /etc/zabbix/zabbix_agentd.d/userparameter_oracle.conf
+    - name: change zabbix-agent_config in UnsafeUserParameters
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: '# UnsafeUserParameters=0'
+        line: 'UnsafeUserParameters=1'
+    - name: start or restart zabbix-agent
+      service:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
+    - name: change orabbix QueryListFile to query_template.props
+      lineinfile:
+        dest: /opt/orabbix/conf/config.props
+        regexp: '{{ ansible_host }}.QueryListFile=.*'
+        line: '{{ ansible_host }}.QueryListFile=./conf/query_template.props'
+      delegate_to: 192.168.12.29
+    - name: Create a new host or update an existing host's info
+      local_action:
+        module: zabbix_host
+        server_url: http://newzabbix.pmph.com
+        login_user: Admin
+        login_password: zabbix
+        host_name: '{{ ansible_host }}'
+        link_templates:
+          - ORACLE_TEMPLATES_Once_a_day
+          - ORACLE_TEMPLATES_RAC
+          - ORACLE_TEMPLATES_STAND_ALONE  
+          - Template OS Linux by Zabbix agent active
+        status: enabled
+        state: present
+        interfaces:
+          - type: 1
+            main: 1
+            useip: 1
+            ip: '{{ ansible_host }}'
+            dns: ""
+            port: 10050

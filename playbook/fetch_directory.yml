@@ -1,0 +1,15 @@
+- hosts: "{{ host }}"
+  tasks:
+      - name: find fetch_machine_directory
+        find:
+          paths: /root/ss_log/
+          patterns: "*"
+          recurse: no
+        register: file_2_fetch
+  
+      - name: fetch machine_directory to localhost_directory
+        fetch:
+          src: "{{ item.path }}"
+          dest: /logBakServer/systemlog_allserver/oracle/{{ inventory_hostname }}/
+          flat: yes
+        with_items: "{{ file_2_fetch.files }}"

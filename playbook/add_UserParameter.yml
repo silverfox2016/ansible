@@ -1,0 +1,18 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+    - name: add UserParameter to  zabbix-agent.conf
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: "{{item.line}}"
+        line: "{{item.line}}"
+      with_items:
+        - { "line": "UserParameter=nowopenfile,cat /proc/sys/fs/file-nr | awk '{print $1}'" }
+        #- { line: 'UserParameter=abcded' }
+      notify:
+      - restart zabbix-agent
+  handlers:
+    - name: restart zabbix-agent
+      service:
+        name: zabbix-agent
+        state: restarted

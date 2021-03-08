@@ -1,0 +1,6 @@
+[all:vars]
+ansible_ssh_private_key_file=/root/yangshuo
+[SSO_SHOP]
+192.168.42.4 ansible_host=192.168.42.4
+192.168.42.50 ansible_host=192.168.42.50
+192.168.42.51 ansible_host=192.168.42.51

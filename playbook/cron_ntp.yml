@@ -1,0 +1,11 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+   - name: ntpdate 192.168.12.29
+     cron:
+       name: ntpdate 192.168.12.29
+       weekday: "*"
+       minute: "*"
+       hour: "*"
+       user: root
+       job: "/usr/sbin/ntpdate 192.168.12.29"

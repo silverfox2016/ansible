@@ -1,0 +1,9 @@
+---
+
+- hosts: "{{ host }}"
+  tasks:
+    - name: push root user sshkey to dst host
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '/root/id_rsa.pub') }}"

@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+    - name: change zabbix-agent_config in Hostname
+      lineinfile:
+        dest: /opt/orabbix/conf/config.props.sample
+        regexp: '{{ ansible_host }}.QueryListFile=.*'
+        line: '{{ ansible_host }}.QueryListFile=./conf/query_template.props'
+      delegate_to: 192.168.12.29
+

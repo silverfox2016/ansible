@@ -1,9 +1,47 @@
-192.168.1.232 ansible_host=192.168.1.232 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
-192.168.5.102 ansible_host=192.168.5.102 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass=")(@!192.168.5.102"
-192.168.1.68 ansible_host=192.168.1.68 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
-192.168.42.46 ansible_host=192.168.42.46 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass=")(@!192.168.42.46"
+#192.168.1.232 ansible_host=192.168.1.232 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+[all:vars]
+ansible_ssh_private_key_file=/root/yangshuo
+[test1]
+192.168.42.79 ansible_host=192.168.42.79 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.42.81 ansible_host=192.168.42.81 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.42.91 ansible_host=192.168.42.91 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.5.216 ansible_host=192.168.5.216 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.1.162 ansible_host=192.168.1.162 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.1.163 ansible_host=192.168.1.163 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.1.16 ansible_host=192.168.1.16 ansible_ssh_user=root 
+192.168.1.17 ansible_host=192.168.1.17 ansible_ssh_user=root 
 
-192.168.2.6 ansible_host=192.168.2.6 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass=")(@!192.168.2.6"
-192.168.2.11 ansible_host=192.168.2.11 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass=")(@!192.168.2.11"
-192.168.5.110 ansible_host=192.168.5.110 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
-192.168.5.176 ansible_host=192.168.5.176 ansible_connection=ssh ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+[innodb]
+192.168.42.202 ansible_host=192.168.42.202 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.42.203 ansible_host=192.168.42.203 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+192.168.42.204 ansible_host=192.168.42.204 ansible_ssh_user=root ansible_ssh_pass="pmph2019!"
+[abc]
+192.168.0.15  ansible_host=192.168.0.15 ansible_ssh_user=root
+192.168.0.20  ansible_host=192.168.0.20 ansible_ssh_user=root
+192.168.0.21  ansible_host=192.168.0.21 ansible_ssh_user=root
+192.168.0.60  ansible_host=192.168.0.60 ansible_ssh_user=root
+192.168.0.62  ansible_host=192.168.0.62 ansible_ssh_user=root
+192.168.0.70  ansible_host=192.168.0.70 ansible_ssh_user=root
+192.168.0.72  ansible_host=192.168.0.72 ansible_ssh_user=root
+192.168.0.80  ansible_host=192.168.0.80 ansible_ssh_user=root
+192.168.0.82  ansible_host=192.168.0.82 ansible_ssh_user=root
+192.168.0.90  ansible_host=192.168.0.90 ansible_ssh_user=root
+192.168.0.92  ansible_host=192.168.0.92 ansible_ssh_user=root
+192.168.0.100  ansible_host=192.168.0.100 ansible_ssh_user=root
+192.168.0.102  ansible_host=192.168.0.102 ansible_ssh_user=root
+192.168.0.104  ansible_host=192.168.0.104 ansible_ssh_user=root
+192.168.0.110  ansible_host=192.168.0.110 ansible_ssh_user=root
+192.168.0.111  ansible_host=192.168.0.111 ansible_ssh_user=root
+192.168.0.112  ansible_host=192.168.0.112 ansible_ssh_user=root
+192.168.0.120  ansible_host=192.168.0.120 ansible_ssh_user=root
+192.168.0.121  ansible_host=192.168.0.121 ansible_ssh_user=root
+192.168.0.122  ansible_host=192.168.0.122 ansible_ssh_user=root
+192.168.0.201  ansible_host=192.168.0.201 ansible_ssh_user=root
+192.168.0.202  ansible_host=192.168.0.202 ansible_ssh_user=root
+192.168.0.205  ansible_host=192.168.0.205 ansible_ssh_user=root
+192.168.0.210  ansible_host=192.168.0.210 ansible_ssh_user=root
+192.168.0.211  ansible_host=192.168.0.211 ansible_ssh_user=root
+192.168.0.212  ansible_host=192.168.0.212 ansible_ssh_user=root
+192.168.0.220  ansible_host=192.168.0.220 ansible_ssh_user=root
+192.168.0.222  ansible_host=192.168.0.222 ansible_ssh_user=root
+

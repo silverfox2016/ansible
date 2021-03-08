@@ -1,0 +1,17 @@
+---
+
+- hosts: "{{ host }}"
+  gather_facts: No
+  tasks:
+    - name: chanage_ilo_ip_xml_IP
+      replace:
+        dest: /mnt/Mod_Network_Settings.xml
+        regexp: '<IP_ADDRESS value="172.*'
+        replace: <IP_ADDRESS value="172.16.{{ ansible_host.split('.',2)[2] }} "/>
+    - name: chanage_ilo_ip_xml_NetMask
+      replace:
+        dest: /mnt/Mod_Network_Settings.xml
+        regexp: '<SUBNET_MASK value="255.255.255.*'
+        replace: <SUBNET_MASK value="255.255.0.0"/>
+    - name: change_ilo_ip
+      shell: hponcfg -f /mnt/Mod_Network_Settings.xml

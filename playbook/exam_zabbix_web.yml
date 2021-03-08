@@ -1,0 +1,25 @@
+---
+- hosts: "{{ host }}"
+  connection : local
+  tasks:
+    - name: Create a new host or update an existing host's info
+      zabbix_host:
+        server_url: http://newzabbix.pmph.com
+        login_user: Admin
+        login_password: zabbix
+        host_name: '{{ ansible_host }}'
+        visible_name: 考试网_{{ ansible_host.split('.',2)[2] }}
+        description: 考试网项目组
+        host_groups:
+          - exam
+        link_templates:
+          - exam Template agent active
+        status: enabled
+        state: present
+        interfaces:
+          - type: 1
+            main: 1
+            useip: 1
+            ip: '{{ ansible_host }}'
+            dns: ""
+            port: 10050

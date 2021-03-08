@@ -8,5 +8,5 @@
       path: /logBakServer
       src: //192.168.10.19/logBakServer
       fstype: cifs
-      opts: "username=logServer,password=PmPh#3025#logS"
+      opts: "user=logServer,password=PmPh#3025#logS"
       state: mounted
