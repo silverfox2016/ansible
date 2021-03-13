@@ -1,0 +1,244 @@
+座机号
+3087
+
+mysql doc 
+https://docs.oracle.com/cd/E17952_01/index.html
+
+
+MySQL Utilities Archive mysql 实用工具
+
+https://docs.oracle.com/cd/E17952_01/mysql-utilities-1.6-en/index.html
+
+
+
+
+安装序列号：
+
+Windows Storage Server 2016 Standard:VN8D3-PR82H-DB6BJ-J9P4M-92F6J
+
+Windows Storage Server 2016 Workgroup:48TQX-NVK3R-D8QR3-GTHHM-8FHXC
+
+******国家精品在线开放课程工作网--首批认定课程*****
+http://www.chinaooc.cn/front/show_result.htm
+
+linux系统排障 优化 
+perf
+http://www.brendangregg.com/perf.html
+perf-tools googleperf-tools
+
+https://support.hpe.com/hpesc/public/home/signin
+email: 77042631@qq.com
+passwd: silverfox2020!
+
+安全问题
+1 : 你童年时最好的朋友姓什么
+  安全问题答案 : 11111111
+2 : 你在校期间最喜爱的老师姓什么
+  安全问题答案 ：22222222
+
+
+
+测试区 光纤交换机
+192.168.42.252
+192.168.42.251
+user:admin
+password:password
+
+长城存储
+192.168.42.223 A控制器
+192.168.42.221 B控制器
+user:manage
+passwd:!manage
+
+
+加速github
+
+
+https://www.ipaddress.com
+
+
+192.30.253.xxx codeload.github.com
+
+192.30.253.xxx github.com
+
+151.101.13.xxx github.global.ssl.fastly.net
+
+52.216.192.xxx  s3.amazonaws.com
+
+52.216.115.19  github-cloud.s3.amazonaws.com
+
+
+
+PMPH_V修改为Pmph3edc$RFV
+PMPH_E修改为Pmph4rfv%TGB
+
+
+
+
+https://access.redhat.com
+user:silverfox2020
+passwd:silverfox2019!
+email:77042631@qq.com
+
+
+Spacewalk
+https://192.168.42.4
+
+user admin
+passwd Pmph2019!
+
+
+PMPH后台管理系统
+http://192.168.1.147:9199
+user ipmph
+passwd Ipmph.com
+
+https://192.168.12.66
+https://119.254.225.109
+user:pmph2019
+passwd:pmph2019!@#$%^
+
+
+http://grafana.pmph.com/
+user:admin
+passwd:pmph2019!
+
+http://zabbix.pmph.com
+user:Admin
+passwd:zabbix
+
+passwdexcel = QAZ949204304
+
+加入技术部
+cmd
+net use /del *
+net use J:  \\192.168.33.107\运维组  "33.107@JSB" /user:"jishubu"
+
+net use J:  \\192.168.10.19\运维组  "YunWZ#_@5921" /user:"yunweizu"
+
+
+192.168.5.18
+https://172.16.1.111
+oneview
+user:administrator
+passwd:pmph2019!
+
+VMware.com
+user 77042631@qq.com
+passwd silverfox_2019A
+
+
+https://login.veeam.com
+user 77042631@qq.com
+passwd silverfox_2020!A
+
+dell.com
+user: pmph
+      pmph
+email: 77042631@qq.com
+passwd silverfox2019A
+
+oracle java
+
+user 77042631@qq.com
+passwd silverfox2019A
+
+
+oracle error messages
+https://docs.oracle.com/database/121/ERRMG/toc.htm
+
+EXSI passwd
+vcenter 192.168.42.75
+user: administrator@vsphere.local
+passwd: Pmph2019!
+pmph2019!
+
+
+ESXI IP地址 192.168.42.39
+ESXI IP地址 192.168.42.54
+
+192.168.42/1.66 
+user:administrator
+passwd:Pmph2019!
+
+
+192.168.33.107
+user:administrator
+passwd:192.168.5.107QAZ
+
+
+github.com
+user: silverfox2016
+passwd: silverfox2020A
+
+grafana.com
+user: silverfox2016
+passwd: silverfox2019
+
+
+
+centos7 规则
+shift键0921 IP地址
+
+
+
+powershell
+
+Get-EventLog -LogName System -EntryType Error -After (Get-Date).AddDays(-1)
+sss
+
+logBakServer 挂载
+mount -t cifs -o username=logServer,password=PmPh#3025#logS //192.168.10.19/logBakServer  /logBakServer/
+
+
+2019年8月22日 工作安排
+
+192.168.42.39 
+命名规则 
+centos7_慕课_测试01
+虚拟16台centos7
+配置
+cpu 2core
+mem 16g
+disk 50G
+yum update -y && yum install chrony vim wget cifs-utils net-tools -y
+
+systemctl enable chronyd
+systemctl start chronyd
+
+ip-list 192.168.42.13-21 192.168.42.23-29
+
+Docker国内Yum源和国内镜像仓库
+
+
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+sudo yum makecache fast
+sudo yum -y install docker-ce
+
+HP ilo 固件
+https://pingtool.org/latest-hp-ilo-firmwares/
+
+
+
+python学习
+https://book.apeland.cn/details/12/
+
+Rundeck
+https://blog.csdn.net/liumiaocn/article/details/89135773
+
+k8s学习
+https://www.notion.so/K8S-b33520bf4f2c4005adb66f5ee1785502
+
+学习 blog
+https://www.tracymc.cn/archives/2502
+https://www.tracymc.cn/archives/2356
+
+
+
+awx
+
+https://ansible.leops.cn/ui/awx/
+
+raid storcli
+https://blog.csdn.net/baidu_25506889/article/details/48292603

@@ -1,0 +1,24 @@
+【RHEL5/6 OPENSSL 升级】
+
+
+查看当前版本
+===========
+openssl version
+
+OPENSSL升级
+===========
+1、上传源码包至服务器指定目录
+rz  openssl-1.0.2o.tar
+
+2、解压安装包
+tar zxvf openssl-1.0.2o.tar
+
+3、进入openssl解压包目录并编缉
+cd openssl-1.0.2o
+./config --prefix=/usr/local --openssldir=/usr/local/openssl
+4、编缉openssl包
+make
+5、安装openssl包
+make install
+6、检查升级版本
+openssl version

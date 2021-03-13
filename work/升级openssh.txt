@@ -1,0 +1,62 @@
+升级openssh
+
+https://www.cnblogs.com/yybrhr/p/9682129.html
+
+
+！！ 开启telnet 登陆
+
+yum -y install xinetd telnet telnet-server
+
+3、允许root用户通过telnet登陆：
+
+编辑/etc/pam.d/login，注释掉下面这行
+
+sed -i '/ignore/s/^/#/g'  /etc/pam.d/login
+
+#vi /etc/pam.d/login
+
+#auth [user_unknown=ignore success=ok ignore=ignore default=bad] pam_securetty.so
+
+4、配置/etc/securetty
+ 
+cp /etc/securetty /etc/securetty.bak
+
+　　再配置
+
+vi /etc/securetty
+
+　　添加超级用户登陆设备。
+
+　　添加超级用户登陆设备至/etc/securetty文件：
+
+echo "pts/1" >> /etc/securetty
+echo "pts/2" >> /etc/securetty
+echo "pts/3" >> /etc/securetty
+echo "pts/4" >> /etc/securetty
+echo "pts/5" >> /etc/securetty
+echo "pts/6" >> /etc/securetty
+echo "pts/7" >> /etc/securetty
+echo "pts/8" >> /etc/securetty
+echo "pts/9" >> /etc/securetty
+echo "pts/10" >> /etc/securetty
+echo "pts/11" >> /etc/securetty
+
+
+5、开启root用户远程登陆
+
+sed -i '/pam_securetty.so/s/^/#/g' /etc/pam.d/remote
+
+　　编辑/etc/pam.d/remote，注释下列这行：
+
+vi /etc/pam.d/remote
+
+#auth required pam_securetty.so
+
+
+6、重启telnet和xinetd服务【telnet服务依赖于xinetd服务】
+ 
+
+
+systemctl start xinetd
+
+验证telnet 登陆

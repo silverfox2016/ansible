@@ -1,0 +1,15 @@
+#BMC LAN配置IP地址
+ipmitool lan set 1 ipaddr 192.168.66.170
+#BMC  LAN配置网关地址
+ipmitool lan set 1 defgw ipaddr 192.168.66.254
+#BMC 配置 root 密码
+ipmitool user set password 2 calvin
+#BMC lan 开启访问
+ipmitool lan set 1 access on
+
+
+
+#查看power status
+ipmitool power status -I lanplus print -H 192.168.66.190 -U root -P calvin
+
+for i in `awk '/192.168.66/ {print $1}' /root/1`; do ipmitool power status -I lanplus print -H ${i}0 -U root -P calvin ;done

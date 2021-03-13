@@ -1,0 +1,83 @@
+长城存储1：
+
+管理地址：192.168.42.223（A控），10.0.0.3（B控）
+24块600GB硬盘创建RAID50，前12块盘一组，后12快盘一组，每组可坏一块硬盘。可用13TB。	
+创建一个13TB卷映射给6台虚拟化服务器，LUN号为1。
+
+
+长城存储2：
+
+管理地址：192.168.42.221（A控），192.168.42.222（B控）
+24块600GB硬盘创建RAID50，前12块盘一组，后12快盘一组，每组可坏一块硬盘。可用13TB。	
+创建一个13TB卷映射给6台虚拟化服务器，LUN号为2。
+
+user:manage
+password:!manage
+
+
+
+Rack03交换机1（上）：
+
+Port08---存储1_A控制器
+Port09---存储2_A控制器
+Port06---Rack01-DL580          10:00:00:00:c9:a2:74:85
+Port12---Rack05-DL580-1        10:00:00:00:c9:a2:75:45 
+Port13---Rack05-DL580-2        10:00:00:00:c9:a2:73:81
+Port11---Rack02-X3850          10:00:00:90:fa:67:76:d8
+Port10---Rack02-GreatWell-1    21:00:00:24:ff:55:e8:7c
+Port14---Rack02-GreatWell-2    21:00:00:24:ff:55:e8:d4
+
+Rack03交换机2（下）：
+
+Port08---存储1_B控制器         
+Port09---存储2_B控制器
+Port06---Rack01-DL580          10:00:00:00:c9:a2:73:77
+Port12---Rack05-DL580-1        10:00:00:00:c9:a2:72:f1
+Port13---Rack05-DL580-2        10:00:00:00:c9:a2:74:72
+Port11---Rack02-X3850          10:00:00:90:fa:67:76:d9
+Port10---Rack02-GreatWell-1    21:00:00:24:ff:55:e8:7d
+Port14---Rack02-GreatWell-2    21:00:00:24:ff:55:e8:d5
+
+Rack03交换机1（上）新增配置：
+
+zonecreate "compu_1_Storage1","2,8;2,6"
+zonecreate "compu_2_Storage1","2,8;2,10"
+zonecreate "compu_3_Storage1","2,8;2,11"
+zonecreate "compu_4_Storage1","2,8;2,12"
+zonecreate "compu_5_Storage1","2,8;2,13"
+zonecreate "compu_6_Storage1","2,8;2,14"
+zonecreate "compu_7_Storage1","2,8;2,1"
+zonecreate "compu_1_Storage2","2,9;2,6"
+zonecreate "compu_2_Storage2","2,9;2,10"
+zonecreate "compu_3_Storage2","2,9;2,11"
+zonecreate "compu_4_Storage2","2,9;2,12"
+zonecreate "compu_5_Storage2","2,9;2,13"
+zonecreate "compu_6_Storage2","2,9;2,14"
+zonecreate "compu_7_Storage2","2,9;2,1"
+
+cfgadd "FC_BR300_B_cfg","compu_1_Storage1;compu_2_Storage1;compu_3_Storage1;compu_4_Storage1;compu_5_Storage1;compu_6_Storage1;compu_1_Storage2;compu_2_Storage2;compu_3_Storage2;compu_4_Storage2;compu_5_Storage2;compu_6_Storage2;compu_7_Storage1;compu_7_Storage2"
+
+cfgsave
+cfgenable "FC_BR300_B_cfg"
+
+Rack03交换机2（下）新增配置：
+
+zonecreate "compu_1_Storage1","1,8;1,6"
+zonecreate "compu_2_Storage1","1,8;1,10"
+zonecreate "compu_3_Storage1","1,8;1,11"
+zonecreate "compu_4_Storage1","1,8;1,12"
+zonecreate "compu_5_Storage1","1,8;1,13"
+zonecreate "compu_6_Storage1","1,8;1,14"
+zonecreate "compu_7_Storage1","1,8;1,1"
+zonecreate "compu_1_Storage2","1,9;1,6"
+zonecreate "compu_2_Storage2","1,9;1,10"
+zonecreate "compu_3_Storage2","1,9;1,11"
+zonecreate "compu_4_Storage2","1,9;1,12"
+zonecreate "compu_5_Storage2","1,9;1,13"
+zonecreate "compu_6_Storage2","1,9;1,14"
+zonecreate "compu_7_Storage2","1,8;1,1"
+
+cfgadd "FC_BR300_A_cfg","compu_1_Storage1;compu_2_Storage1;compu_3_Storage1;compu_4_Storage1;compu_5_Storage1;compu_6_Storage1;compu_1_Storage2;compu_2_Storage2;compu_3_Storage2;compu_4_Storage2;compu_5_Storage2;compu_6_Storage2;compu_7_Storage1;compu_7_Storage2"
+
+cfgsave
+cfgenable "FC_BR300_A_cfg"

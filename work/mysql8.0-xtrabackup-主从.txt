@@ -1,0 +1,41 @@
+mysqld --initialize-insecure --datadir=/opt/data/ --user=mysql --lower-case-table-names=1 
+
+mysql_master
+vim /etc/my.cnf
+
+
+
+
+create user 'rep_pmph'@'192.168.0.202' IDENTIFIED BY 'pmph2019!';
+
+grant REPLICATION SLAVE ON *.* TO 'rep_pmph'@'192.168.0.202' ;
+flush privileges; 
+
+
+rpm -ivh https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+
+percona-release setup ps80
+
+yum install percona-xtrabackup-80
+
+
+#master
+xtrabackup --defaults-file=/opt/mysql/my.cnf --host=localhost --user=root --port=3306 --socket=/opt/mysql/mysql.sock --backup --target-dir=/usr/local/mysql_backup/
+
+scp -r /usr/local/mysql_backup/ 192.168.0.202:/root/
+#slave
+xtrabackup --defualts-files=/opt/mysql/my.cnf --user=root --copy-back --target-dir=/root/mysql_backup/
+
+chown mysql:mysql -R /opt/data/
+systemctl start mysqld
+
+CHANGE MASTER TO   MASTER_HOST='192.168.0.201',MASTER_USER='rep_pmph',  MASTER_PASSWORD='pmph2019!',MASTER_LOG_FILE='mysql-bin.000008', MASTER_LOG_POS=155;
+
+start slave;
+
+show slave status \G
+
+ 
+ 
+ 
+ 

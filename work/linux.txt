@@ -1,0 +1,37 @@
+lvm ++++
+
+
+parted -s /dev/sda mkpart primary 21.5G 107G 
+
+parted /dev/sda toggle 4 lvm
+
+pvcreate /dev/sda4
+
+vgextend centos /dev/sda4
+
+lvextend -L +100G /dev/mapper/centos-root /dev/sda4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+firewall-cmd --add-masquerade --permanent
+
+firewall-cmd --add-forward-port=port=3389:proto=tcp:toaddr=192.168.42.66:toport=3389
+
+firewall-cmd --zone=public --add-port=3389/tcp --permanent
+
+CIFS VFS: Unexpected lookup error -112
+echo 0 > /proc/fs/cifs/OplockEnabled
+
+echo 0 > /proc/fs/cifs/LookupCacheEnabled

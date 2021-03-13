@@ -1,0 +1,136 @@
+BitNami是一个开源项目，该项目产生的开源软件包括安装 Web应用程序和解决方案堆栈，以及虚拟设备
+https://bitnami.com/
+
+开源堡垒机  ssh web k8s Databases 
+https://goteleport.com/teleport/docs/installation/
+
+参考文档
+https://www.jianshu.com/u/9af6effd4fc5
+
+
+https://developer.hpe.com/
+
+
+
+zabbix weathermap 
+
+http://www.360doc.com/content/16/0825/10/35405893_585770242.shtml
+
+openDCIM：一款免费的开源数据中心管理工具
+openDCIM PHP语言开源 可以记录机房温湿度，可以记录机柜拜访情况，最大特点可以通过MIB文件导入信息。也就是可以自动导入设备名称，厂家，端口状态
+http://network.51cto.com/art/201508/487728.htm
+https://www.opendcim.org/
+
+
+RackTables称自己为一个“机架空间、IP地址、服务器、交换机、路由器等的管理框架”。它拥有一个web界面，执行报告和配置，并管理名字服务。
+https://www.racktables.org/
+
+zabbix
+https://github.com/monitoringartist/dockbix-xxl/#free-test-dockbix-instance
+https://share.zabbix.com/network_devices
+zabbix-grafana 
+https://www.cnblogs.com/imyalost/p/9873641.html
+
+itop ITIL
+iTop，作为全面支持ITIL流程的一款ITSM工具，具有强大的ITSM功能，开源免费、简单易用。
+iTop，即IT运营门户（IT Operation Portal），是一个开源web应用程序，用于IT环境的日常运营。它基于ITIL最佳实践，而又不拘泥于任何具体流程。它很灵活，可以适应不管是非正 式的、务实的流程，还是严格遵循ITIL的流程。它的核心是CMDB，即配置管理数据库（Configuration Management Data Base）。CMDB是iTop最早开发的部分，然后是工单流程和其它衍生流程。 它的理念是，CMDB必须是业务工具。保证CMDB的准确性和最新性的唯一方式是： IT团队（如技术支持代理、IT工程师等）每天使用它。此外，CMDB与其它IT工具（如监控系统、报表工具、自动化库存等）整合得越多，CMDB就越全 面
+https://github.com/purplegrape/iTop-CN
+https://sourceforge.net/projects/itop/
+
+OTRS
+OTRS 简介
+
+OTRS 是由 Open Ticket Request System 首字母缩略字而来。是以全球业界公认的 IT 服务管理标准 ITIL V3 为基础，开发的一整套 IT 服务管理解决方案。
+
+OTRS 开源项目于 2001 年在德国创立，已被全球超过16万用户使用，支持38种语言。
+
+OTRS 是一套集成的 IT 服务管理系统，支持事件，问题，服务请求，变更，发布，CMDB，知识管理，服务和服务水平协议（SLA）。
+https://otrs.com/
+https://www.oschina.net/p/otrs
+
+
+
+ELK + grafana
+一、概念介绍
+Elasticsearch
+ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是第二流行的企业搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。 在elasticsearch中，所有节点的数据是均等的。
+Logstash
+Logstash是一个完全开源的工具，他可以对你的日志进行收集、分析，并将其存储供以后使用（如，搜索），您可以使用它。说到搜索，logstash带有一个web界面，搜索和展示所有日志。
+Kibana
+Kibana是一个基于浏览器页面的Elasticsearch前端展示工具。Kibana全部使用HTML语言和Javascript编写的。
+Grafana
+Grafana是 Graphite 和 InfluxDB 仪表盘和图形编辑器。Grafana 是开源的，功能齐全的度量仪表盘和图形编辑器，支持 Graphite，InfluxDB 和 OpenTSDB。Grafana 主要特性：灵活丰富的图形化选项；可以混合多种风格；支持白天和夜间模式；多个数据源；Graphite 和 InfluxDB 查询编辑器等等。
+https://blog.csdn.net/xiegh2014/article/details/54584171
+
+
+
+
+FOG Project
+一个免费的开源网络计算机克隆和管理解决方案
+https://fogproject.org/
+https://wiki.fogproject.org/wiki/index.php?title=CentOS_7
+
+
+
+
+foreman
+
+https://theforeman.org/manuals/1.23/quickstart_guide.html
+
+
+katello
+
+
+https://theforeman.org/plugins/katello/
+
+pulp
+
+https://pulpproject.org/
+
+openshift
+
+
+https://www.openshift.com/
+
+
+FreeIPA
+
+https://www.freeipa.org/page/Main_Page
+
+
+packer
+
+https://www.packer.io/
+
+Terraform
+
+https://www.terraform.io/intro/index.html
+
+
+openvas
+https://blog.csdn.net/xlsj228/article/details/90766648
+
+
+automatron (Ah-Tom-a-tron) 是一个自治的IT系统监控和修复框架
+
+
+https://python.ctolib.com/article/comments/16378
+
+
+构建自动化机器映像
+
+https://www.packer.io/
+
+
+DevOps/CI/CD工程师入门系列
+
+https://blog.csdn.net/u011541946/category_9291664.html
+
+
+Jenkins高级篇之Pipeline代码自动化
+
+https://blog.csdn.net/u011541946/category_8223796.html
+
+
+朱双印ansible 
+http://www.zsythink.net/

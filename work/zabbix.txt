@@ -1,0 +1,88 @@
+ELK 联动 ZABBIX 实现异常日志告警 
+
+https://mp.weixin.qq.com/s?__biz=MzIyMDY2MTE3Mw==&mid=2247485187&idx=1&sn=8a0cbbecf5a60a0cabf23730fc036221&chksm=97c9d3d9a0be5acf25398bd765ef8a5e1066ac04ecda4f799bf0f69298b3c19b409f6475a834&mpshare=1&scene=23&srcid=&sharer_sharetime=1576642286464&sharer_shareid=dbb98f0bb786b869d56cf7506c079a62#rd
+
+
+
+
+DBforBIX zabbix DB 监控 支持 Oracle/MySQL Server/ PostgreSQL/MS SQL Server/DB2/Sybase Anywhere/HP Allbase
+
+git clone https://github.com/smartmarmot/DBforBIX.git
+
+oracle服务器上
+登录
+sqlplus / as  sysdba 
+查看当前用户
+show user
+
+查看dba用户
+ select * from dba_users;
+查看所有用户
+select * from all_users;
+
+创建zabbix用户 密码
+###user=zabbix
+###password=pmph2019
+
+create user zabbix identified by pmph2019 default tablespace system temporary tablespace temp profile default account unlock;
+
+授权 连接 to zabbix
+GRANT CONNECT TO ZABBIX;
+授权 资源 to zabbix
+GRANT RESOURCE TO ZABBIX;
+更改zabbix用户规则
+ALTER USER ZABBIX DEFAULT ROLE ALL;
+给zabbix系统特权
+GRANT SELECT ANY TABLE TO ZABBIX;
+GRANT CREATE SESSION TO ZABBIX;	
+GRANT SELECT ANY DICTIONARY TO ZABBIX;
+GRANT UNLIMITED TABLESPACE TO ZABBIX;
+GRANT SELECT ANY DICTIONARY TO ZABBIX;
+
+增加访问acl
+exec dbms_network_acl_admin.create_acl(acl => 'resolve.xml',description => 'resolve acl',principal =>'ZABBIX',is_grant => true,privilege => 'resolve');
+exec dbms_network_acl_admin.assign_acl(acl => 'resolve.xml',host =>'*');
+
+创建dbforbix用户
+useradd dbforbix
+修改conf/config.properties
+
+# A list of Zabbix servers, increase the number to add more
+ZabbixServer.1.Address=192.168.12.28
+ZabbixServer.1.Port=10051
+
+DB.DB1.Type=oracle
+DB.DB1.Name=192.168.42.50
+DB.DB1.Url=jdbc:oracle:thin:@192.168.42.50:1521:orcl # orcl(服务名） =  select instance_name from  V$instance;
+DB.DB1.User=zabbix
+DB.DB1.Password=pmph2019
+DB.DB1.MaxWait=10
+DB.DB1.MaxSize=10
+DB.DB1.MaxIdle=1
+DB.DB1.ItemFile=oracle
+#DB.DB1.Persistence=TRUE
+DB.DB1.Persistence=FALSE
+
+sqlplus / as sysdba
+
+查看某个用户(ABCuser这个用户)是否被锁：
+select LOCK_DATE,username from dba_users where username='ZABBIX';
+
+解锁方法
+ALTER USER ZABBIX ACCOUNT UNLOCK;
+
+
+
+weixin 报警
+https://github.com/OneOaaS/weixin-alert
+toparty = https://work.weixin.qq.com/api/devtools/devtool.php 管理通讯录 获取部门方法
+./weixin_linux_amd64_toparty -corpid ww6141f4072d0729f0 -corpsecret fUgIJaMag2Ja5I3RIZuhCIG7918zNJh90-SmZ0erBoY -agentid 1000003 -msg 'This is the test message from Zabbix' -toparty=11
+
+./weixin_linux_amd64 -corpid ww6141f4072d0729f0 -corpsecret fUgIJaMag2Ja5I3RIZuhCIG7918zNJh90-SmZ0erBoY -agentid 1000003 -user Yinhu -msg '11223344'
+
+
+
+
+严重 High 
+灾难 Disaster
+

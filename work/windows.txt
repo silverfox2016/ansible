@@ -1,0 +1,51 @@
+﻿"netsh"是Windows 2000/XP/2003操作系统自身提供的命令行脚本实用工具，它允许用户在本地或远程显示或修改当前正在运行的计算机的网络配置。 
+安全策略导出 
+netsh ipsec static exportpolicy d:\ip.ipsec 
+
+
+修改
+
+
+安全策略导入
+netsh ipsec static importpolicy d:\ip.ipsec 
+激活这个策略 
+netsh ipsec static set policy name=策略名称 assign=y 
+
+允许运行签名脚本
+set-executionpolicy remotesigned
+
+
+网络映射
+
+net use K:  \\192.168.10.19\运维组  "33.107@JSB" /user:"jishubu"
+
+net use J:  \\192.168.10.19\运维组  "YunWZ#_@5921" /user:"yunweizu"
+
+net use I: \\192.168.10.19\logBakServer "PmPh#3025#logS" /user:logServer
+
+net use L: \\192.168.10.19\dbBakServer "PmPh#3562#dbBakS" /user:dbBakServer
+
+net use I: /del
+
+net use * /del
+
+
+
+ansible 管理windows
+    Set-ExecutionPolicy RemoteSigned -Force;
+
+　　winrm quickconfig -q -force;
+
+　　winrm set winrm/config/service/auth '@{Basic="true"}';
+
+　　winrm set winrm/config/service '@{AllowUnencrypted="true"}';
+
+　　New-NetFirewallRule -Name Ansible -DisplayName Ansible -Enabled True -Action Allow -Protocol TCP -LocalPort 5985 -Direction InBound
+
+    winrm configSDDL default  
+	 
+	将本地账号和本地账户和管理组 添加进来，然后给予Full Control权限，读权限
+	
+	
+	
+	

@@ -1,0 +1,56 @@
+mysqld --initialize-insecure --datadir=/opt/data/ --user=mysql
+
+
+xtrabackup 主从
+mysql_master
+
+vim /etc/my.cnf
+server_id = 28 # 比slave数字小
+log_bin = mysql-bin 
+binlog_format = mixed # binlog row 与 statement level混合模式
+
+8.0
+create user 'rep_pmph'@'192.168.0.202' IDENTIFIED BY 'pmph2019!';
+
+grant REPLICATION SLAVE ON *.* TO 'rep_pmph'@'192.168.0.202' ;
+flush privileges; 
+5.7
+grant replication slave on *.* to rep_pmph@'192.168.0.201' identified by 'pmph2019!';
+
+flush privileges; 
+
+
+rpm -ivh https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+percona-release setup ps57 #ps57 = mysql_master版本
+yum install percona-xtrabackup-24 # 安装xtrabakcup2.4版本
+innobackupex --defaults-file=/etc/my.cnf --user=root /opt/ # 完全备份数据库
+innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log  /opt/ 更新数据库日志文件
+
+rsync -avzr --progress -e 'ssh -i /home/yangshuo' /opt/ 192.168.42.4:/opt/ #rsync方式传输到目标机器
+
+mysql_slave
+
+rpm -ivh https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+
+percona-release setup ps57 #ps57 = mysql_master版本
+yum install percona-xtrabackup-24 # 安装xtrabakcup2.4版本
+
+
+innobackupex --defaults-file=/etc/my.cnf --user=root --apply-log  /opt/ #恢复日志文件
+
+innobackupex --defaults-file=/etc/my.cnf --user=root --copy-back  /opt/ #恢复数据文件
+查看pos数据
+cat /opt/2019-11-27_12-46-13/xtrabackup_binlog_info
+mysql-bin.000001        254692829
+
+配置主从
+CHANGE MASTER TO   MASTER_HOST='192.168.12.28',MASTER_USER='rep',  MASTER_PASSWORD='123',MASTER_LOG_FILE='mysql-bin.000001', MASTER_LOG_POS=254692829;
+开启同步
+start slave;
+
+查看同步信息
+show slave status\G
+
+stop slave ;
+set GLOBAL SQL_SLAVE_SKIP_COUNTER=1;
+start slave ;
