@@ -1,7 +1,19 @@
 - hosts: "{{ host }}"
   gather_facts: No
   tasks:
-
+    - name: Copy zabbix to windows c:\Temp
+      win_copy:
+        src: /etc/ansible/playbook/software/zabbix_agent-4.4.1-win-amd64-openssl.msi
+        dest: C:\WINDOWS\Temp\zabbix_agent-4.4.1-win-amd64-openssl.msi
+    - name: Install zabbix-agent for windows 
+      win_package:
+        path: C:\WINDOWS\Temp\zabbix_agent-4.4.1-win-amd64-openssl.msi
+        state: present
+        arguments:
+          - "SERVER=192.168.12.29"
+          - "HOSTNAME={{ ansible_host }}"
+          - 'ENABLEPATH=1'
+          - 'ENABLEREMOTECOMMANDS=1'
     - name: change zabbix-agent_config in Server
       win_lineinfile:
         path: 'C:\\Program Files\Zabbix Agent\zabbix_agentd.conf'
