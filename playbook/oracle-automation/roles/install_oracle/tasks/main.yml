@@ -1,0 +1,230 @@
+- name: User | Add Oracle group
+  group: name={{ item.group }} gid={{ item.gid }} state=present
+  with_items: "{{ oracle_groups }}"
+  tags: addoraclegroup
+
+- name:  User | Add Oracle user
+  user:  name={{ item.username }}  group={{ item.primgroup }} groups={{ item.othergroups }} uid={{ item.uid }} generate_ssh_key=yes append=yes state=present  password={{ item.passwd }}
+  with_items: "{{ oracle_users }}"
+  tags: addoracleuser
+
+- name: User | Add Grid user
+  user: name={{ item.username }}  group={{ item.primgroup }} groups={{ item.othergroups }} uid={{ item.uid }} generate_ssh_key=yes append=yes state=present password={{ item.passwd }}
+  when: role_separation
+  with_items: "{{ grid_users }}"
+  tags: addgriduser
+
+- name: User | Add Oracle user to sudoers
+  template: src=sudoers.j2 dest=/etc/sudoers.d/{{ item.username }} owner=root mode=0600
+  with_items: "{{oracle_users}}"
+  when: configure_oracle_sudo
+  tags:
+   - sudoadd
+
+- name: User | Add Grid user to sudoers
+  template: src=sudoers.j2 dest=/etc/sudoers.d/{{ item.username }} owner=root mode=0600
+  with_items: "{{grid_users}}"
+  when: role_separation and configure_oracle_sudo
+  tags:
+   - sudoadd
+
+- name: Create a directory if it does not exist
+  file: path={{ item.dir }} state=directory owner={{ item.owner }} group={{ item.group }} mode=775 recurse=yes
+  with_items: "{{ oracle_directorys }}"
+  tags: directory
+
+- name: Oracle-recommended security limits for oracle
+  template: src=oracle-seclimits.conf.j2 dest=/etc/security/limits.d/99-oracle-limits.conf backup=yes
+  when: ansible_os_family == 'RedHat'
+  tags: seclimit
+
+- name: Oracle-recommended kernel settings
+  sysctl: name={{ item.name }} value={{ item.value }} state=present reload=yes ignoreerrors=yes
+  with_items: "{{oracle_sysctl}}"
+  tags: sysctl
+
+- name: Oracle hugepages
+  sysctl: name={{ item.name }} value={{ item.value }} state=present reload=yes ignoreerrors=yes
+  with_items: "{{oracle_hugepages}}"
+  tags: sysctl,hugepages
+
+- name: Oracle-recommended PAM config
+  lineinfile: dest=/etc/pam.d/login state=present line="#ORACLE SETTING\nsession required pam_limits.so"
+  tags: pamconfig
+
+- name: Change shm 1G
+  mount: name=/dev/shm src=tmpfs fstype=tmpfs opts="defaults,size=1G" state=mounted
+  tags: changeshm
+
+- name: Add gird .bash_profile environment
+  template: src=grid_profile.j2 dest={{ grid_user_home }}/.bash_profile owner={{ grid_install_user }} group={{ oracle_group }} mode=755 
+  tags: gridprofile
+- name: Add oracle .bash_profile environment
+  template: src=oracle_profile.j2 dest={{ oracle_user_home }}/.bash_profile owner={{ oracle_user }} group={{ oracle_group }} mode=755 
+  tags: oracleprofile
+
+- name: ssh-keys | get public key for oracle user
+  shell: cat /home/{{oracle_user}}/.ssh/id_rsa.pub
+  register: oracle_key
+  tags: sshkeys
+
+- name: ssh-keys | Add keys for {{oracle_user}} user
+  authorized_key: user={{oracle_user}} key="{{ item[1] }}"
+  delegate_to: "{{ item[0] }}"
+  with_nested:
+    - "{{ groups[hostgroup] }}"
+    - "{{ oracle_key.stdout }}"
+  tags: sshkeys
+  when: oracle_key is defined
+
+- name: ssh-keys | create .known_hosts
+  file:
+      path: "/home/{{item}}/.ssh/known_hosts"
+      state: touch
+      owner: "{{ item }}"
+      group: "{{ oracle_group }}"
+  with_items:
+      - "{{oracle_user}}"
+  changed_when: False
+- include: known-hosts.yml
+  loop_control:
+    loop_var: user
+  tags: sshkeys,known_hosts
+
+- name: Install packages required by Oracle on OL/RHEL
+  yum:
+     name: "{{ oracle_packages }}"
+     state: installed
+     enablerepo: "{{ extrarepos_enabled |default (omit, True) }}"
+     disablerepo: "{{ extrarepos_disabled |default (omit, True) }}"
+  when: install_os_packages and ansible_os_family == 'RedHat'
+  tags: os_packages
+- name: Install packages required by Oracle for ASMlib on OL/RHEL
+  yum:
+     name: "{{ oracle_asm_packages }}"
+     state: installed
+     enablerepo: "{{ extrarepos_enabled |default (omit, True) }}"
+     disablerepo: "{{ extrarepos_disabled |default (omit, True) }}"
+  when: install_os_packages and device_persistence == 'asmlib' and ansible_os_family == 'RedHat' and asm_diskgroups is defined
+  tags: os_packages, oscheck
+
+- name: install-home-db | Mount nfs share with installation media
+  mount: src="{{ nfs_server_sw }}:{{ nfs_server_sw_path }}" name={{ oracle_stage_remote }} fstype=nfs state=mounted
+  when: install_from_nfs
+  tags: nfsmountdb
+
+
+- name: Asmlib | Add configuration
+  template: src=oracleasm.j2 dest=/etc/sysconfig/oracleasm-_dev_oracleasm
+  register: asmlibconfig
+  when: device_persistence|lower == 'asmlib' and asm_diskgroups is defined
+  tags:
+    - asmlibconfig
+
+- name: Asmlib | Add configuration (link)
+  file: src=/etc/sysconfig/oracleasm-_dev_oracleasm dest=/etc/sysconfig/oracleasm state=link force=yes
+  register: asmlibconfig
+  when: device_persistence|lower == 'asmlib' and asm_diskgroups is defined
+  tags:
+    - asmlibconfig
+
+- name: Asmlib | Enable and start Oracle Asmlib
+  service: name=oracleasm  state=started  enabled=yes
+  when: device_persistence == 'asmlib' and asm_diskgroups is defined
+  tags:
+    - asmlibconfig
+
+- name: Asmlib | Restart Asmlib
+  service: name=oracleasm  state=restarted
+  when: asm_diskgroups is defined and device_persistence == 'asmlib' and asmlibconfig.changed
+  tags:
+    - asmlibconfig
+
+- name: ASM-storage | partition devices
+  shell: parted {{ item.1.device }} "mklabel gpt mkpart primary 1 -1"
+  args:
+     creates: "{{ item.1.device}}{{partition_suffix}}"
+  with_subelements:
+      - "{{ asm_diskgroups }}"
+      - disk
+  run_once: "{{ configure_cluster}}"
+  when: partition_devices and asm_diskgroups is defined
+  tags: asmstorage
+
+- name: ASMCA | Create script to build asm-diskgroups
+  template: src=asmca-createdg.sh.j2 dest="{{ oracle_rsp_stage }}"/asmca-createdg-{{ item.diskgroup }}.sh  owner="{{ grid_install_user }}" group={{ oracle_group }} mode=744 backup=yes
+  with_items: "{{asm_diskgroups}}"
+  run_once: "{{ configure_cluster}}"
+  when: item.diskgroup != oracle_asm_init_dg and asm_diskgroups is defined
+  tags: asmcaa
+
+- name: ASMCA | Create ASM diskgroups
+  shell: "{{ oracle_rsp_stage }}/asmca-createdg-{{ item.diskgroup }}.sh"
+  with_items: "{{asm_diskgroups}}"
+  become: yes
+  become_user: "{{ grid_install_user }}"
+  run_once: "{{ configure_cluster}}"
+  when: item.diskgroup != oracle_asm_init_dg and asm_diskgroups is defined
+  ignore_errors: True
+  tags: asmca
+  register: asmca
+
+- name: Print Results
+  debug: var=item
+  with_items:
+     - "{{ asmca.results|map(attribute='stdout_lines')|list }}"
+  run_once: "{{ configure_cluster}}"
+  #when: master_node
+  ignore_errors: true
+  tags: asmca
+
+- name: ASMCA | List ASM diskgroups
+  shell: "{{ oracle_home_gi }}/bin/srvctl status diskgroup -g {{ item.diskgroup }}"
+  with_items: "{{asm_diskgroups}}"
+  become: yes
+  become_user: "{{ grid_install_user }}"
+  run_once: "{{ configure_cluster}}"
+  when:  asm_diskgroups is defined
+  tags: srvctlasm
+  register: srvctlasm
+
+- name: list diskgroups
+  debug: var=item
+  with_items:
+     - "{{ srvctlasm.results|map(attribute='stdout_lines')|list }}"
+  run_once: "{{ configure_cluster}}"
+  when: asm_diskgroups is defined
+  ignore_errors: true
+  tags: srvctlasm
+
+- include: roles/install_oracle/tasks/udev.yml
+- include: roles/install_oracle/tasks/asmlib.yml
+
+- name: install-home-gi | Check if GI is already installed
+  #shell: grep "{{ oracle_home_gi }}" "{{ oracle_inventory_loc }}/ContentsXML/inventory.xml" |wc -l
+  shell: cat "{{ oracle_inventory_loc }}/ContentsXML/inventory.xml" |grep -w {{ oracle_home_gi  }} |awk  '{print $3}' | cut -f2 -d'"'
+  tags:
+  - checkifgiinstall
+  changed_when: False
+  register: checkgiinstall
+
+- name: install-home-gi | check if GI has been configured
+  stat: path=/etc/oracle/olr.loc
+  register: olrloc
+  tags: checkifgiinstall
+- name: install-home-gi | set fact for patch_before_rootsh
+  set_fact:
+      patch_before_rootsh: False
+  when: olrloc.stat.exists and patch_before_rootsh
+  tags: checkifgiinstall
+
+- name: install-home-gi | Create common directories
+  file: dest={{ item.name }} mode={{ item.mode}} owner={{ item.owner }} group={{ item.group }} state=directory
+  with_items: "{{oracle_directories}}"
+  tags: gidirectories
+- name: install-home-gi | Create stage directory (version specific)
+  file: dest={{ oracle_stage }}/{{ item.version }} mode=775 owner={{ oracle_user }} group={{ oracle_group }} state=directory
+  become: yes
+  with_items: "{{oracle_sw_image_gi}}"
+  when:  oracle_install_version_gi  ==  item.version
+  tags: gidirectories
