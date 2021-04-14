@@ -1,0 +1,2 @@
+HISTTIMEFORMAT="[%Y.%m.%d-%H:%M:%S] [${USER_IP}] "
+HISTSIZE=1000000
