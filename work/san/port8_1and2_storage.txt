@@ -1,0 +1,22 @@
+//适用于8端口激活，0和1端口连接存储。
+zonecreate "port_0_2","1,0;1,2"
+zonecreate "port_0_3","1,0;1,3"
+zonecreate "port_0_4","1,0;1,4"
+zonecreate "port_0_5","1,0;1,5"
+zonecreate "port_0_6","1,0;1,6"
+zonecreate "port_0_7","1,0;1,7"
+zonecreate "port_1_2","1,1;1,2"
+zonecreate "port_1_3","1,1;1,3"
+zonecreate "port_1_4","1,1;1,4"
+zonecreate "port_1_5","1,1;1,5"
+zonecreate "port_1_6","1,1;1,6"
+zonecreate "port_1_7","1,1;1,7"
+cfgcreate "zone_cfg","port_0_2;port_0_3;port_0_4;port_0_5;port_0_6;port_0_7;port_1_2;port_1_3;port_1_4;port_1_5;port_1_6;port_1_7"
+cfgsave
+cfgenable "zone_cfg"
+
+清除所有Zone配置（三步）：
+cfgdisable	//禁用Zone配置文件
+cfgclear	//清除所有Zone配置文件
+cfgsave	//保存Zone配置文件
+以上三步的效果和在JAVA界面zone中的clear all效果相同。
