@@ -1,0 +1,13 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+    - name: copy zabbix_check_redis.py to /usr/sbin/zabbix_check_redis.py
+      copy:
+        src: /etc/ansible/playbook/script/zabbix_check_redis.py
+        dest: /usr/sbin/zabbix_check_redis.py
+        
+    - name: copy 
+      copy:
+        src: /etc/ansible/playbook/conf/userparameters_redis.conf
+        dest: /etc/zabbix/zabbix_agentd.d/userparameters_redis.conf
+ 

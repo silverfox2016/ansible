@@ -1,0 +1,22 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+      delegate_to: 192.168.12.29
+    - name: Create a new host or update an existing host's info
+      local_action:
+        module: zabbix_host
+        server_url: http://newzabbix.pmph.com
+        login_user: Admin
+        login_password: zabbix
+        host_name: '{{ ansible_host }}'
+        host_groups:
+          - Traffic statistics
+        status: enabled
+        state: present
+        interfaces:
+          - type: 1
+            main: 1
+            useip: 1
+            ip: '{{ ansible_host }}'
+            dns: ""
+            port: 10050

@@ -1,0 +1,60 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+    - name: remove zabbix.repo
+      file:
+        path: /etc/yum.repos.d/zabbix.repo
+        state: absent
+    - name: copy zabbix7.repo dest host
+      copy:
+        src: /etc/yum.repos.d/zabbix7.repo
+        dest: /etc/yum.repos.d/zabbix.repo
+      when: ansible_distribution_major_version == "7"
+    - name: copy zabbix6.repo dest host
+      copy:
+        src: /etc/yum.repos.d/zabbix6.repo
+        dest: /etc/yum.repos.d/zabbix.repo
+      when: ansible_distribution_major_version == "6"
+    - name: copy zabbix5.repo dest host
+      copy:
+        src: /etc/yum.repos.d/zabbix5.repo
+        dest: /etc/yum.repos.d/zabbix.repo
+      when: ansible_distribution_major_version == "5"
+    - name: copy zabbix.repo.key dest host
+      copy:
+        src: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591
+        dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591
+    - name: install zabbix-agent
+      yum:
+        name: zabbix-agent
+        state: latest
+        enablerepo: zabbix
+ 
+    - name: change zabbix-agent_config in Server
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'Server='
+        line: 'Server=192.168.12.29'
+ 
+    - name: change zabbix-agent_config in ServerActive
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'ServerActive'
+        line: 'ServerActive=192.168.12.29'
+ 
+    - name: change zabbix-agent_config in Hostname
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: '^Hostname'
+        line: 'Hostname={{ ansible_host }}'
+ 
+    - name: change zabbix-agent_config in HostMetadata
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: '# HostMetadata='
+        line: 'HostMetadata=Linux'
+    - name: start or restart zabbix-agent
+      service:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes

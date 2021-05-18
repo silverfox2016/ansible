@@ -1,0 +1,41 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+# User specific environment and startup programs
+#/bin/ssh-agent bash
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+
+export PATH
+
+# {{ ansible_managed }}
+
+export PS1='[$LOGNAME'@'$ORACLE_SID `basename $PWD`]$'
+
+# Set up the Oracle parameters
+        ORACLE_SID=+ASM1
+	export ORACLE_SID
+	ORACLE_BASE=/opt/app/grid/base
+        export ORACLE_BASE
+        ORACLE_HOME=/opt/app/grid/112_64
+        export ORACLE_HOME
+        export PATH=$ORACLE_HOME/bin:$PATH
+        umask 022
+
+# Set Up Alias:
+        alias asmcmd='. oraenv ;rlwrap asmcmd -p'
+        #alias sqlplus='rlwrap -D2 -s 1000 -irc -b'\''"@(){}[],+=&^%#;|\'\'' -f ~/.Scripts/tanel/tpt_public_unixmac/setup/wordfile_11gR2.txt sqlplus'
+        alias sqlplus='rlwrap sqlplus'
+        alias rman='rlwrap rman'
+        alias sid='. oraenv'
+        alias sqlp='. oraenv; sqlplus'
+        alias sqlsys='. oraenv ;rlwrap sqlplus "/ as sysasm"'
+        #alias sqlsys='. oraenv ;rlwrap -D2 -irc -b'\''"@(){}[],+=&^%#;|\'\'' -f ~/.Scripts/tanel/tpt_public_unixmac/setup/wordfile_11gR2.txt sqlplus "/ as sysdba"'
+        alias dbh='cd $ORACLE_HOME'
+        alias dbb='cd $ORACLE_BASE'
+        alias c='clear'
+        #alias talert='tail -200f $ORACLE_BASE/diag/rdbms/$ORA_DB_UNQ_NAME/$ORACLE_SID/trace/alert_$ORACLE_SID.log'
+        #alias ggsci='rlwrap $GG_HOME/ggsci'

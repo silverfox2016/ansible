@@ -1,0 +1,57 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+    - name: synchronize openssh 8.3 version rpm to {{ host }} for centos6
+      synchronize:
+        src: /root/ansible/playbook/software/openssh/centos6/
+        dest: /root/
+      when: ansible_distribution_major_version == "6"
+    - name: synchronize openssh 8.3 version rpm to {{ host }} for centos7
+      synchronize:
+        src: /root/ansible/playbook/software/openssh/centos7/
+        dest: /root/
+      when: ansible_distribution_major_version == "7"
+    - name: copy pam.d sshd to {{ host }}
+      copy:
+       src: /root/ansible/playbook/software/openssh/pam/sshd
+       dest: /etc/pam.d/sshd
+       backup: yes
+    - name: yum upgrade openssh for centos7 
+      yum:
+        name: /root/{{ item }}
+        state: latest
+      with_items:
+          - openssh-8.3p1-1.el7.x86_64.rpm
+          - openssh-clients-8.3p1-1.el7.x86_64.rpm
+          - openssh-debuginfo-8.3p1-1.el7.x86_64.rpm
+          - openssh-server-8.3p1-1.el7.x86_64.rpm
+      when: ansible_distribution_major_version == "7"
+    - name: yum upgrade openssh  for centos6
+      yum:
+        name: /root/{{ item }}
+        state: latest
+      with_items:
+          - openssh-8.3p1-1.el6.x86_64.rpm
+          - openssh-clients-8.3p1-1.el6.x86_64.rpm
+          - openssh-debuginfo-8.3p1-1.el6.x86_64.rpm
+          - openssh-server-8.3p1-1.el6.x86_64.rpm
+      when: ansible_distribution_major_version == "6"
+    - name: change sshd_config file PermitRootLogin yes
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '# PermitRootLogin yes'
+        line: 'PermitRootLogin yes'
+    - name: chmod file /etc/ssh/ssh_host_*_key
+      file:
+        path: /etc/ssh/{{ item }}
+        mode: 0600 
+      with_items:
+          - ssh_host_dsa_key
+          - ssh_host_ecdsa_key
+          - ssh_host_ed25519_key
+          - ssh_host_rsa_key
+      when: ansible_distribution_major_version == "7"
+    - name: restart sshd
+      service:
+        name: sshd
+        state: restarted

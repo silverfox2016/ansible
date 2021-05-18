@@ -1,0 +1,42 @@
+---
+
+- hosts: "{{ host }}"
+  gather_facts: No
+  tasks:
+    - name: find file
+      find:
+        paths: /etc/yum.repos.d
+        patterns: '*.repo'
+      register: files_to_delete
+
+    - name: rm all repo
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete.files }}"
+
+    - name: copy repo file
+      copy:
+        src: /root/CentOS-Base.repo
+        dest: /etc/yum.repos.d/CentOS-Base.repo
+
+    - name: Basic install
+      yum:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+          - sendmail
+          - mailx
+          - tmux
+          - strace
+          - cifs-utils
+          - dstat
+          - rsync
+          - chrony
+          - vim
+          - wget
+          - net-tools
+          - bind-utils
+          - ntpdate
+          - epel-release
+

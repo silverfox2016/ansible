@@ -1,0 +1,4 @@
+- include: base.yaml
+- include: cron.yaml
+- include: rsyslog.yaml
+- include: logrotate.yaml

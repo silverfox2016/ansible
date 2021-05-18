@@ -1,0 +1,15 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+    - name: copy Nginx_Rotate.sh to {{ ansible_host }} /usr/local/
+      copy:
+        src: /etc/ansible/playbook/scripts/nginx/muke/Nginx_Rotate.sh
+        dest: /usr/local/Nginx_Rotate.sh
+        mode: '0755'
+    - name:  add Nginx_Rotate crontab every day 0
+      cron:
+        name: add Nginx_Rotate crontab every day 0
+        minute: "1"
+        hour: "0"
+        user: root
+        job: "/usr/local/Nginx_Rotate.sh"

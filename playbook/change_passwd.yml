@@ -1,0 +1,9 @@
+---
+
+- hosts: "{{ host }}"
+  gather_facts: false
+  tasks:
+  - name: change root password
+    shell: echo ')(@!{{ ansible_host }}' |passwd --stdin root
+     
+

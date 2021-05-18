@@ -1,0 +1,12 @@
+---
+- hosts: "{{ host }}"
+  gather_facts: No
+  tasks:
+  ##########ssacli##########################
+    - name: copy ssacli file
+      copy:
+        src: /etc/ansible/playbook/software/ssacli-4.17-6.0.x86_64.rpm
+        dest: /root/ssacli-4.17-6.0.x86_64.rpm
+  #############rpm -ivh sacli##################
+    - name: rpm -ivh ssacli
+      shell: rpm -ivh /root/ssacli-4.17-6.0.x86_64.rpm

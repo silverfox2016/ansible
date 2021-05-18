@@ -1,0 +1,25 @@
+---
+- hosts: "{{ host }}"
+  connection : local
+  tasks:
+    - name: Create a new host or update an existing host's info
+      zabbix_host:
+        server_url: http://newzabbix.pmph.com
+        login_user: Admin
+        login_password: zabbix
+        host_name: '{{ ansible_host }}'
+        visible_name: 慕课_{{ ansible_host.split('.',2)[2] }}
+        description: 慕课项目组
+        host_groups:
+          - mooc
+        link_templates:
+          - mooc Template Zabbix agent active
+        status: enabled
+        state: present
+        interfaces:
+          - type: 1
+            main: 1
+            useip: 1
+            ip: '{{ ansible_host }}'
+            dns: ""
+            port: 10050

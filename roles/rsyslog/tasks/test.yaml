@@ -1,0 +1,14 @@
+---
+    - hosts: localhost
+      remote_user: root
+      tasks:
+        - name: test #
+          shell: echo "{{item}}"
+          with_items:
+            - haha
+            - heihei
+            - hehe
+          register: hi_var
+        - debug: var=hi_var.results[0].stdout
+        - debug: var=hi_var.results[1].stdout
+        - debug: var=hi_var.results[2].stdout

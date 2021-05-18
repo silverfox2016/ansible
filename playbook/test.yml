@@ -1,0 +1,9 @@
+---
+- hosts: "{{ host }}"
+  serial: "10%"
+  tasks:
+    - name: abc
+      shell: which ntpdate
+      register: ntpdate_bin 
+    - debug:
+        msg: "{{ ntpdate_bin['stdout_lines'] }}"

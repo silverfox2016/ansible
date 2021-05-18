@@ -1,0 +1,38 @@
+  - name: User | Add Oracle group
+    group: name={{ item.group }} gid={{ item.gid }} state=present
+    with_items: 
+        - { group: oinstall, gid: 1000 }
+        - { group: dba , gid: 1001 }
+        - { group: oper , gid: 1002 }
+        - { group: asmadmin, gid: 1003 }
+        - { group: asmoper, gid: 1004 }
+        - { group: asmdba, gid: 1005 }
+  
+  - name:  User | Add Oracle user
+    user:  name={{ item.username }}  group={{ item.primgroup }} groups={{ item.othergroups }} uid={{ item.uid }} generate_ssh_key=yes append=yes state=present  password={{ item.passwd }}
+    with_items: 
+        - { username: oracle, uid: 1000, primgroup: oinstall, othergroups: "dba,asmdba,oper" ,passwd: "$6$maSUxV6JSbiIClZq$.VVZviKMY1uH.XQE4dn7QYTHjuuSc5saAHiMy60c0KCxYpsDsn0BRyYhMz0ToLDCDog6UuwVNaTk0.DBSYPdt1" }
+        - { username: grid, uid: 1001, primgroup: oinstall, othergroups: "asmadmin,asmdba,asmoper,oper,dba", passwd: "$6$maSUxV6JSbiIClZq$.VVZviKMY1uH.XQE4dn7QYTHjuuSc5saAHiMy60c0KCxYpsDsn0BRyYhMz0ToLDCDog6UuwVNaTk0.DBSYPdt1"}
+  
+  - name: Create a directory if it does not exist
+    file: path={{ item.dir }} state=directory owner={{ item.owner }} group={{ item.group }} mode=775 recurse=yes
+    with_items:
+        - { dir: /oracle/app/oraInventory, owner: grid ,group: oinstall }
+        - { dir: /oracle/app/grid, owner: grid ,group: oinstall }
+        - { dir: /oracle/app/oracle, owner: oracle ,group: oinstall }
+  
+  - name: Oracle-recommended security limits
+    template: src=oracle-seclimits.conf.j2 dest=/etc/security/limits.d/99-oracle-limits.conf backup=yes
+    when: ansible_os_family == 'RedHat'
+    tags: seclimit
+  
+  - name: Oracle-recommended kernel settings
+    sysctl: name={{ item.name }} value="{{ item.value }}" state=present reload=yes ignoreerrors=yes
+    with_items: "{{oracle_sysctl}}"
+    tags: sysctl
+  
+  - name: Oracle hugepages
+    sysctl: name={{ item.name }} value="{{ item.value }}" state=present reload=yes ignoreerrors=yes
+    with_items: "{{oracle_hugepages}}"
+    tags: sysctl,hugepages
+

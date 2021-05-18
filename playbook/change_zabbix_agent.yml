@@ -1,0 +1,34 @@
+- hosts: "{{ host }}"
+  gather_facts: No
+  tasks:
+
+    - name: change zabbix-agent_config in Server
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'Server='
+        line: 'Server=192.168.12.29'
+    - name: change zabbix-agent_config in ServerActive
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'ServerActive'
+        line: 'ServerActive=192.168.12.29'
+    - name: change zabbix-agent_config in UnsafeUserParameters
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'UnsafeUserParameters'
+        line: 'UnsafeUserParameters=1'
+    - name: change zabbix-agent_config in HostMetadata
+      lineinfile:
+        dest: /etc/zabbix/zabbix_agentd.conf
+        regexp: 'HostMetadata'
+        line: 'HostMetadata=Linux'
+    - name: change zabbix-agent_config in Hostname
+      lineinfile:
+        path: '/etc/zabbix/zabbix_agentd.conf'
+        regexp: 'Hostname='
+        line: Hostname={{ ansible_host }}
+    - name: start or restart zabbix-agent
+      service:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes

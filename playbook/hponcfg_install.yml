@@ -1,0 +1,23 @@
+---
+- hosts: "{{ host }}"
+  gather_facts: No
+  tasks:
+  ##########hponcfg##########################
+
+    - name: copy hponcfg file
+      copy:
+        src: /etc/ansible/playbook/software/hponcfg-5.5.0-0.x86_64.rpm
+        dest: /root/hponcfg-5.5.0-0.x86_64.rpm
+  ###########linux-LOsamplescripts5.20.0.tgz#########
+    - name: copy linux-LOsamplescripts file
+      copy:
+        src: /etc/ansible/playbook/software/linux-LOsamplescripts5.20.0.tgz
+        dest: /root/linux-LOsamplescripts5.20.0.tgz
+  ###########shell tar /mnt/ ######################
+    - name: tar linux-LOsamplescripts /mnt/
+      shell: tar zxf /root/linux-LOsamplescripts5.20.0.tgz -C /mnt/
+  #############rpm -ivh hponcfg###################
+    - name: rpm -ivh hponcfg
+      yum:
+        name: /root/hponcfg-5.5.0-0.x86_64.rpm
+        state: installed

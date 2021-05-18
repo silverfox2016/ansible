@@ -1,0 +1,4 @@
+---
+- hosts: "{{ hostgroup }}"
+  roles:
+   - install_oracle

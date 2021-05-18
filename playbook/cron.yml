@@ -1,0 +1,13 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+    - name: /var/spool/cron/root
+      file:
+        path: /root/ss_log
+        state: directory
+        mode: '0755'
+    - name: change zabbix-agent_config in ServerActive
+      lineinfile:
+        dest: /var/spool/cron/root
+        line: '* * * * * sleep 5; /usr/sbin/ss -ant dst :1521 >>/root/ss_log/`date +"\%Y\%m\%d"`.log'
+

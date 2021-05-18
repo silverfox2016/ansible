@@ -1,0 +1,13 @@
+---
+
+- hosts: "{{ host }}"
+  gather_facts: No
+  tasks:
+    - name: BMC LAN配置IP地址
+      shell: ipmitool lan set 1 ipaddr {{ ansible_host }}0
+    - name: BMC  LAN配置网关地址
+      shell: ipmitool lan set 1 defgw ipaddr 192.168.66.254
+    - name: BMC 配置 root 密码
+      shell: ipmitool user set password 2 calvin
+    - name: BMC lan 开启访问
+      shell: ipmitool lan set 1 access on
