@@ -118,7 +118,10 @@ https://www.tracymc.cn/archives/2356
 
 
 
-awx
+#!/bin/bash
+read -p "input 需要转换的虚拟机名称: " Name
+virt-v2v -v -x -ic vpx://administrator%40vsphere.local@192.168.1.252/Datacenter/192.168.1.220/?no_verify=1 -b br0 -os temp --color -ip /root/.netrc ${Name}
+
 
 https://ansible.leops.cn/ui/awx/
 
