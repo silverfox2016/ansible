@@ -93,10 +93,10 @@ passwd: silverfox2020A
 Docker国内Yum源和国内镜像仓库
 
 
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2
-sudo yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
-sudo yum makecache fast
-sudo yum -y install docker-ce
+yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+yum makecache fast
+yum -y install docker-ce
 
 HP ilo 固件
 https://pingtool.org/latest-hp-ilo-firmwares/
