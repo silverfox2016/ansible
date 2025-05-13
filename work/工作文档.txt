@@ -89,6 +89,10 @@ github.com
 user: silverfox2016
 passwd: silverfox2020A
 
+https://login.vivaldi.net/
+user: silverfox2025
+passwd: acXcvPygiz4s#qn@v2
+
 
 Docker国内Yum源和国内镜像仓库
 
