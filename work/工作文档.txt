@@ -90,6 +90,7 @@ https://docs.oracle.com/database/121/ERRMG/toc.htm
 github.com
 user: silverfox2016
 passwd: silverfox2020A
+passwd: $y$j9T$2rpZbCJUg8QEop938YyvW0$/BBM9OMPrI2zOFzHgBtwLKaNNzcYQc6AaHKtRKdJzdC
 
 https://login.vivaldi.net/
 user: silverfox2025
@@ -133,3 +134,4 @@ https://ansible.leops.cn/ui/awx/
 
 raid storcli
 https://blog.csdn.net/baidu_25506889/article/details/48292603
+
