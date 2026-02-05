@@ -135,4 +135,9 @@ https://ansible.leops.cn/ui/awx/
 raid storcli
 https://blog.csdn.net/baidu_25506889/article/details/48292603
 
+hippo项目
+https://meetchances.feishu.cn/wiki/KTZ3wZhzki9e5skcllLc8YYrnZg
+https://open.bigmodel.cn/api/paas/v4/
+26fb0d99e67b48c0b47a35574fe51a73.TetTTdtXglQsolji
+
 
